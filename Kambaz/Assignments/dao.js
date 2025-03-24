@@ -27,3 +27,7 @@ export function updateAssignment(assignmentId, assignmentUpdates) {
   Object.assign(assignment, assignmentUpdates);
   return assignment;
 }
+
+export function getAllAssignments() {
+  return Database.assignments;
+}

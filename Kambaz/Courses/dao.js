@@ -1,12 +1,13 @@
+import enrollments from "../Database/enrollments.js";
 import Database from "../Database/index.js";
 import { v4 as uuidv4 } from "uuid";
 
 export function findAllCourses() {
   return Database.courses;
 }
+
 export function findCoursesForEnrolledUser(userId) {
   const { courses, enrollments } = Database;
-  console.log('enrollments', enrollments);
   const enrolledCourses = courses.filter((course) =>
     enrollments.some(
       (enrollment) =>
@@ -35,4 +36,15 @@ export function updateCourse(courseId, courseUpdates) {
   const course = courses.find((course) => course._id === courseId);
   Object.assign(course, courseUpdates);
   return course;
+}
+
+export function getUsersForCourse(courseId) {
+  const { users } = Database;
+  const usersInCourse = users.filter((user) =>
+    enrollments.some(
+      (enrollment) =>
+        enrollment.course === courseId && enrollment.user === user._id
+    )
+  );
+  return usersInCourse;
 }

@@ -19,3 +19,7 @@ export function addEnrollment(enrollment) {
 export function deleteEnrollment(enrollmentId) {
   Database.enrollments = Database.enrollments.filter((enrollment) => enrollment._id !== enrollmentId);
 }
+
+export function getAllEnrollments() {
+  return Database.enrollments;
+}
