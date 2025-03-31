@@ -30,3 +30,7 @@ export function updateAssignment(assignmentId, assignmentUpdates) {
 export function getAllAssignments() {
   return model.find();
 }
+
+export function deleteAssignmentsForCourse(courseId) {
+  return model.deleteMany({ course: courseId });
+}

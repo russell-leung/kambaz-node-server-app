@@ -20,9 +20,8 @@ export default function CourseRoutes(app) {
     const { courseId } = req.params;
     const status = await dao.deleteCourse(courseId);
     if (status.deletedCount) {
-      // TODO: delete all modules, assignments, and enrollments for this course
       await modulesDao.deleteModulesForCourse(courseId);
-      // await assignmentsDao.deleteAssignmentsForCourse(courseId);
+      await assignmentsDao.deleteAssignmentsForCourse(courseId);
       await enrollmentsDao.deleteEnrollmentsForCourse(courseId);
     }
     res.send(status);
