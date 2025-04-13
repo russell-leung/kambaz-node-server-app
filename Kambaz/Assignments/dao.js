@@ -1,33 +1,36 @@
-import Database from "../Database/index.js";
-import { v4 as uuidv4 } from "uuid";
+import model from "./model.js";
 
-export function getAssignmentsForCourse(courseId) {
-  return Database.assignments.filter((assignment) => assignment.course === courseId);
+export function getAssignmentsForCourse(courseId, searchText) {
+  if (searchText) {
+    return model.find({
+      course: courseId,
+      title: { $regex: searchText, $options: "i" },
+      description: { $regex: searchText, $options: "i" },
+    });
+  }
+  return model.find({ course: courseId });
 }
 
 export function getAssignmentById(assignmentId) {
-  return Database.assignments.find((assignment) => assignment._id === assignmentId);
+  return model.findById(assignmentId);
 }
 
 export function createAssignment(assignment) {
-  const newAssignment = { ...assignment };
-  Database.assignments = [...Database.assignments, newAssignment];
-  return newAssignment;
+  return model.create(assignment);
 }
 
 export function deleteAssignment(assignmentId) {
-  Database.assignments = Database.assignments.filter((assignment) => assignment._id !== assignmentId);
+  return model.deleteOne({ _id: assignmentId });
 }
 
 export function updateAssignment(assignmentId, assignmentUpdates) {
-  const assignment = Database.assignments.find((assignment) => assignment._id === assignmentId);
-  if (!assignment) {
-    return null;
-  }
-  Object.assign(assignment, assignmentUpdates);
-  return assignment;
+  return model.updateOne({ _id: assignmentId }, { $set: assignmentUpdates });
 }
 
 export function getAllAssignments() {
-  return Database.assignments;
+  return model.find();
+}
+
+export function deleteAssignmentsForCourse(courseId) {
+  return model.deleteMany({ course: courseId });
 }
